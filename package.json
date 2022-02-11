@@ -1,0 +1,23 @@
+﻿{
+  "name": "com.jontka.ioni.essentials",
+  "version": "0.1.0",
+  "displayName": "Ioni personal essentials",
+  "description": "Contains helpers, essentials and commonly used scripts and assets for unity.",
+  "unity": "2021.1",
+  "unityRelease": "10f1",
+  "documentationUrl": "https://github.com/tunderix/IoniEssentials/README.md",
+  "changelogUrl": "https://github.com/tunderix/IoniEssentials",
+  "licensesUrl": "https://github.com/tunderix/IoniEssentials/LICENSE.md",
+  "dependencies": {},
+  "keywords": [
+    "Essentials",
+    "ScriptExtensions",
+    "Ioni",
+    "Helpers"
+  ],
+  "author": {
+    "name": "Ioni",
+    "email": "sami.repo@live.com",
+    "url": "https://bisse.ninja/"
+  }
+}
