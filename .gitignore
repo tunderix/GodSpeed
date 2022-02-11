@@ -1,1 +1,5 @@
-﻿/.idea
+﻿# Rider configurations
+/.idea
+
+# Sonarlint issuestores ignored
+*.pb
