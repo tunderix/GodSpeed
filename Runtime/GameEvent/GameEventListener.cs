@@ -1,9 +1,8 @@
-using Creator.Utilities;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 
-namespace Creator.Common.GameEvent
+namespace Ioni.GameEvent
 {
     public class GameEventListener : MonoBehaviour
     {

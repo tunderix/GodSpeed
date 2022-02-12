@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace Creator.Utilities
+namespace Ioni.Utilities
 {
     /// <summary>
     /// Override Unity Editor labels for serialized properties

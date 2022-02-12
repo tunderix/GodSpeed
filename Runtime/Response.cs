@@ -4,7 +4,7 @@ using System.Diagnostics;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-namespace Creator.Utilities
+namespace Ioni.Utilities
 {
     public enum Response
     {

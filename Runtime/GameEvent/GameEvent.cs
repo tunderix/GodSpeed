@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Creator.Utilities;
+using Ioni.Utilities;
 using UnityEngine;
 
-namespace Creator.Common.GameEvent
+namespace Ioni.GameEvent
 {
     /// <summary>
     /// GameEvent

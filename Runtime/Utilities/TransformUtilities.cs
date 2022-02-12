@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Creator.Utilities
+namespace Ioni.Utilities
 {
     /// <summary>
     /// Should contain common utilities to help with Unity.

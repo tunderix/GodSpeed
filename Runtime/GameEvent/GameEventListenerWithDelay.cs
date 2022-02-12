@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Creator.Common.GameEvent
+namespace Ioni.GameEvent
 {
     public class GameEventListenerWithDelay : GameEventListener
     {
