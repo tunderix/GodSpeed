@@ -4,6 +4,11 @@ using UnityEngine.Events;
 
 namespace Ioni.GameEvent
 {
+    /// <summary>
+    /// GameEventListenerWithDelay
+    /// Extended game event listener that can be configured with delay
+    /// Delay is handled by a coroutine
+    /// </summary>
     public class GameEventListenerWithDelay : GameEventListener
     {
         [SerializeField] private float delay = 1f; 
@@ -12,17 +17,19 @@ namespace Ioni.GameEvent
         private void Awake() => listenEvent.Register(this);
         private void OnDestroy() => listenEvent.Deregister(this);
         
+        /// <summary>
+        /// Invoke ActEvent after waiting the delay 
+        /// </summary>
         public override void RaiseEvent()
         {
             actEvent.Invoke();
-            if(debuggingEnabled) Debug.Log("Unity event was triggered");
+            if(debuggingEnabled) D.Info("Unity event was triggered, invoking on delay: ", delay);
             StartCoroutine(RunDelayedEvent());
         }
 
         private IEnumerator RunDelayedEvent()
         {
             yield return new WaitForSeconds(delay);
-            if(debuggingEnabled) Debug.Log("Delayed unity event was triggered");
             delayedUnityEvent.Invoke();
         }
     }
