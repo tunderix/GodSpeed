@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Creator.Utilities
+namespace Ioni
 {
     /// <summary>
     /// D - Logging
