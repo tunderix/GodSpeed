@@ -2,6 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ *
+ * public class TransformUtilityTests
+    {
+        private Bounds _bounds;
+        
+        [SetUp]
+        public void Setup()
+        {
+            _bounds = new Bounds(new Vector3(4, 4, 4), new Vector3(3, 3, 3));
+        }
+        
+        [Test]
+        public void RandomPointInsideReturnPointIsInsideBounds()
+        {
+            // Generate random point inside _bounds. Each of the values should be between 4 +- (3/2)
+            Vector3 rndPoint = Vector3.back; //TransformUtilities.RandomPointInside(bounds: _bounds);
+            // X is inside offered bounds
+            Assert.LessOrEqual(rndPoint.x, 5.5);
+            Assert.GreaterOrEqual(rndPoint.x, 2.5);
+            // Y is inside offered bounds
+            Assert.LessOrEqual(rndPoint.y, 5.5);
+            Assert.GreaterOrEqual(rndPoint.y, 2.5);
+            // Z is inside offered bounds
+            Assert.LessOrEqual(rndPoint.z, 5.5);
+            Assert.GreaterOrEqual(rndPoint.z, 2.5);
+        }
+    }
+ */
 namespace Ioni.Extensions
 {
     /// <summary>
