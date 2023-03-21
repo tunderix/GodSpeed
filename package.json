@@ -1,6 +1,6 @@
 {
   "name": "com.ioni.godspeed",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "displayName": "GodSpeed",
   "description": "Contains helpers, essentials and commonly used scripts and assets for unity.",
   "unity": "2021.1",
