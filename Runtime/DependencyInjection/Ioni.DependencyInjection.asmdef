@@ -1,9 +1,11 @@
 {
-    "name": "Ioni.Utilities",
+    "name": "Ioni.DependencyInjection",
     "rootNamespace": "",
     "references": [
         "GUID:3ca7c0434bd7ac342872ee6639758d80",
-        "GUID:6d8afb46798c70648a44b5f4ca17f297"
+        "GUID:5f106ccff4414bd489acb9633104a637",
+        "GUID:6d8afb46798c70648a44b5f4ca17f297",
+        "GUID:c326c4807351a7440b17920418743521"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

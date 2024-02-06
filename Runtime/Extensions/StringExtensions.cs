@@ -186,5 +186,25 @@ namespace Ioni.Extensions
         {
             D.Warn(context, text);
         }
+        
+        /// <summary>
+        /// Add string at the front of the string
+        /// </summary>
+        /// <param name="text">The string you just typed</param>
+        /// <param name="prefix">String to add on text</param>
+        public static string WithPrefix(this string text, string prefix = "")
+        {
+            return $"{prefix}{text}";
+        }
+        
+        /// <summary>
+        /// Add string at the end of the string
+        /// </summary>
+        /// <param name="text">The string you just typed</param>
+        /// <param name="suffix">String to add on text</param>
+        public static string WithSuffix(this string text, string suffix = "")
+        {
+            return $"{text}{suffix}";
+        }
     }
 }
