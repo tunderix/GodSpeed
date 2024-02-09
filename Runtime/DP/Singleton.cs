@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Ioni.DP
 {
+    /*
     public class Singleton<T> : MonoBehaviour where T : Component
     {
         private static T _instance;
@@ -73,4 +74,5 @@ namespace Ioni.DP
             if(debugMode) D.Info(message);   
         }
     }
+    */
 }

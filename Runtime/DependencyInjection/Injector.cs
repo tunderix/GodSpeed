@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Ioni.DP;
+using Ioni.DP.Singleton;
 using Ioni.Utilities;
 using UnityEngine;
 using Ioni.Attributes;
@@ -10,7 +10,7 @@ using Ioni.Attributes;
 namespace Ioni.DependencyInjection
 {
     [DefaultExecutionOrder(-1000)]
-    public class Injector : Singleton<Injector>
+    public class Injector : MSingleton<Injector>
     {
         private const BindingFlags k_bindingFlags =
             BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
@@ -21,19 +21,21 @@ namespace Ioni.DependencyInjection
         {
             base.Awake();
             
-            var providers = UtilityProvider.Instance.AllMonoBehaviours.OfType<IDependencyProvider>();
+            var providers = AllMonoBehaviours.OfType<IDependencyProvider>();
 
             foreach (var provider in providers)
             {
                 RegisterProvider(provider);
             }
 
-            var injectables = UtilityProvider.Instance.AllMonoBehaviours.Where(IsInjectable);
+            var injectables = AllMonoBehaviours.Where(IsInjectable);
             foreach (var injectable in injectables)
             {
                 Inject(injectable);
             }
         }
+        
+        private MonoBehaviour[] AllMonoBehaviours => FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.InstanceID);
 
         private void Inject(object instance)
         {
