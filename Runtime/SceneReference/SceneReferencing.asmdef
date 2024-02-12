@@ -1,7 +1,9 @@
 {
     "name": "Ioni.SceneReferencing",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:3ca7c0434bd7ac342872ee6639758d80"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

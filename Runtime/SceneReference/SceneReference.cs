@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
@@ -58,9 +59,9 @@ namespace Ioni.SceneReferencing
         #endregion
 
         /// <summary>
-        /// Gets the scene build index. -1 if no scene was assigned or it's not added to builds.
+        /// Build index of the scene.
+        /// -1 if no scene was assigned or it's not added to builds.
         /// </summary>
-
         public int BuildIndex
         {
             get
@@ -68,13 +69,11 @@ namespace Ioni.SceneReferencing
                 #if UNITY_EDITOR
                 {
                     buildIndex = GetSceneBuildIndex(sceneAsset);
-                    if (required  &&  buildIndex < 0)
-                    {
-                        if (sceneAsset != null)
-                            Debug.LogError($"Trisibo.SceneField: The following scene is assigned to a scene field as required, but isn't added to builds: {AssetDatabase.GetAssetPath(sceneAsset)}");
-                        else
-                            Debug.LogError("Trisibo.SceneField: A scene field is marked as required, but no scene is assigned");
-                    }
+                    if (!required || buildIndex >= 0) return buildIndex;
+                    var errorMessage = sceneAsset != null
+                        ? $"isn't added to builds: {AssetDatabase.GetAssetPath(sceneAsset)}"
+                        : "no scene is assigned";
+                    D.Err($"SceneReference: Marked as required but {errorMessage}");
                 }
                 #endif
 
@@ -82,19 +81,42 @@ namespace Ioni.SceneReferencing
             }
         }
 
-
+        /// <summary>
+        /// Is the build index found for scene
+        /// Checks whether build index != -1
+        /// </summary>
         public bool IsSet => buildIndex != -1;
+
         
+        #region Implicit Operations
+        /// <summary>
+        /// Operate SceneReferences scene name as string 
+        /// </summary>
+        /// <param name="sceneReference">this</param>
+        /// <returns>SceneReference name</returns>
+        public static implicit operator string(SceneReference sceneReference)
+        {
+            return sceneReference.sceneAsset.name;
+        }
+        
+        /// <summary>
+        /// Operate SceneReferences build index as int 
+        /// </summary>
+        /// <param name="sceneReference">this</param>
+        /// <returns>SceneReference build index</returns>
+        public static implicit operator int(SceneReference sceneReference)
+        {
+            return sceneReference.buildIndex;
+        }
 
-
+        #endregion
+        
         #region ISerializationCallbackReceiver implementation
         #if UNITY_EDITOR
-
-
+        
         /// <summary>
         /// Implementation of <see cref="ISerializationCallbackReceiver.OnBeforeSerialize"/>.
         /// </summary>
-
         void ISerializationCallbackReceiver.OnBeforeSerialize()
         {
             buildIndex = GetSceneBuildIndex(sceneAsset);
@@ -103,13 +125,6 @@ namespace Ioni.SceneReferencing
                 BuildProcessor.AddMissingRequiredSceneBuildError(sceneAsset);
         }
 
-
-
-
-
-
-
-
         /// <summary>
         /// Implementation of <see cref="ISerializationCallbackReceiver.OnAfterDeserialize"/>.
         /// </summary>
@@ -117,133 +132,110 @@ namespace Ioni.SceneReferencing
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
         }
-
-
+        
         #endif
         #endregion
-
-
-
-
-
-
-
-
-        #region Build processor
+        
+        #region Build Processor
         #if UNITY_EDITOR
-
-
-        class BuildProcessor : IPreprocessBuildWithReport, IPostprocessBuildWithReport
+        private class BuildProcessor : IPreprocessBuildWithReport, IPostprocessBuildWithReport
         {
-            static HashSet<SceneAsset> missingRequiredSceneAssets = new HashSet<SceneAsset>();
-            static bool requiredSceneIsUnassigned;
+            static readonly HashSet<SceneAsset> MissingRequiredSceneAssets = new();
+            static bool _requiredSceneIsUnassigned;
 
 
-            /// <summary>Adds a missing required scene error to be shown when building. The added errors will be cleared when a new build is started.</summary>
+            /// <summary>
+            /// Adds a missing required scene error to be shown when building.
+            /// The added errors will be cleared when a new build is started.
+            /// </summary>
             /// <param name="sceneAsset">The asset of the scene missing in the build. Can be null.</param>
             public static void AddMissingRequiredSceneBuildError(SceneAsset sceneAsset)
             {
                 if (sceneAsset != null)
-                    missingRequiredSceneAssets.Add(sceneAsset);
+                    MissingRequiredSceneAssets.Add(sceneAsset);
                 else
-                    requiredSceneIsUnassigned = true;
+                    _requiredSceneIsUnassigned = true;
             }
             
                 
-            /// <summary>Implementation of <see cref="IOrderedCallback.callbackOrder"/>.</summary>
+            /// <summary>
+            /// Implementation of <see cref="IOrderedCallback.callbackOrder"/>.
+            /// </summary>
             int IOrderedCallback.callbackOrder => 0;
 
 
-            /// <summary>Implementation of <see cref="IPreprocessBuildWithReport.OnPreprocessBuild"/>.</summary>
+            /// <summary>
+            /// Implementation of <see cref="IPreprocessBuildWithReport.OnPreprocessBuild"/>.
+            /// </summary>
             void IPreprocessBuildWithReport.OnPreprocessBuild(BuildReport report)
             {
                 UpdateCachedBuildIndexes();
-                missingRequiredSceneAssets.Clear();
-                requiredSceneIsUnassigned = false;
+                MissingRequiredSceneAssets.Clear();
+                _requiredSceneIsUnassigned = false;
             }
 
 
-            /// <summary>Implementation of <see cref="IPostprocessBuildWithReport.OnPostprocessBuild"/>.</summary>
+            ///
+            /// <summary>
+            /// Implementation of <see cref="IPostprocessBuildWithReport.OnPostprocessBuild"/>.
+            /// </summary>
             void IPostprocessBuildWithReport.OnPostprocessBuild(BuildReport report)
             {
                 string errorMessage = null;
 
-                if (requiredSceneIsUnassigned)
+                if (_requiredSceneIsUnassigned)
                     errorMessage += "  - A required scene field doesn't have an assigned scene";
                 
-                if (missingRequiredSceneAssets.Count > 0)
+                if (MissingRequiredSceneAssets.Count > 0)
                 {
                     if (errorMessage != null)
                         errorMessage += "\n";
-                    errorMessage += "  - The following scenes are assigned to scene fields as required, but aren't added to builds:";
-                    foreach (var sceneAsset in missingRequiredSceneAssets)
-                        errorMessage += $"\n    - {AssetDatabase.GetAssetPath(sceneAsset)}";
+                    errorMessage += "  - The following scenes are assigned to scene fields as required, " +
+                                    "but aren't added to builds:";
+                    errorMessage = MissingRequiredSceneAssets.Aggregate(errorMessage, (current, sceneAsset) 
+                        => current + $"\n    - {AssetDatabase.GetAssetPath(sceneAsset)}");
 
-                    missingRequiredSceneAssets.Clear();
+                    MissingRequiredSceneAssets.Clear();
                 }
 
-                if (errorMessage != null)
-                {
-                    errorMessage = "Trisibo.SceneField: The following errors have been found:\n" + errorMessage;
-                    throw new BuildFailedException(errorMessage);
-                }
+                if (errorMessage == null) return;
+                errorMessage = "SceneReference: The following errors have been found:\n" + errorMessage;
+                throw new BuildFailedException(errorMessage);
             }
         }
-
 
         #endif
         #endregion
 
-
-
-
-
-
-
-
-        #region Editor members
+        #region Editor Members
         #if UNITY_EDITOR
-
-
-        static Dictionary<SceneAsset, int> cachedBuildIndexes = new Dictionary<SceneAsset, int>();
-
-
-
+        static Dictionary<SceneAsset, int> _cachedBuildIndexes = new();
 
         /// <summary>
         /// Updates the cached build indexes.
         /// </summary>
-
-        static void UpdateCachedBuildIndexes()
+        private static void UpdateCachedBuildIndexes()
         {
-            cachedBuildIndexes.Clear();
+            _cachedBuildIndexes.Clear();
 
-            int buildIndex = -1;
+            var buildIndex = -1;
             foreach (var scene in EditorBuildSettings.scenes)
             {
-                if (scene.enabled)
+                if (!scene.enabled) continue;
+                buildIndex++;
+                var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(scene.path);
+                if (sceneAsset != null)
                 {
-                    buildIndex++;
-                    SceneAsset sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(scene.path);
-                    if (sceneAsset != null)
-                        cachedBuildIndexes.Add(sceneAsset, buildIndex);
+                    _cachedBuildIndexes.Add(sceneAsset, buildIndex);
                 }
             }
         }
 
-
-
-
-
-
-
-
         /// <summary>
-        /// Called by Unity when loading the editor.
+        /// Subscribe build index caching to SceneList changes
         /// </summary>
-
         [InitializeOnLoadMethod]
-        static void OnEditorInitializeOnLoad()
+        private static void OnEditorInitializeOnLoad()
         {
             UpdateCachedBuildIndexes();
 
@@ -251,26 +243,11 @@ namespace Ioni.SceneReferencing
             EditorBuildSettings.sceneListChanged += UpdateCachedBuildIndexes;
         }
 
-
-
-
-
-
-
-
         /// <summary>
         /// ** Editor-only **
         /// Gets the scene asset, if assigned.
         /// </summary>
-
         public SceneAsset EditorSceneAsset => sceneAsset;
-
-
-
-
-
-
-
 
         /// <summary>
         /// ** Editor-only **
@@ -278,15 +255,12 @@ namespace Ioni.SceneReferencing
         /// </summary>
         /// <param name="sceneAsset">The scene asset.</param>
         /// <returns>The build index, -1 if not found.</returns>
-
-        static int GetSceneBuildIndex(SceneAsset sceneAsset)
+        public static int GetSceneBuildIndex(SceneAsset sceneAsset)
         {
-            if (sceneAsset == null  ||  !cachedBuildIndexes.TryGetValue(sceneAsset, out int buildIndex))
+            if (sceneAsset == null  ||  !_cachedBuildIndexes.TryGetValue(sceneAsset, out int buildIndex))
                 return -1;
             return buildIndex;
         }
-
-
         #endif
         #endregion
     }

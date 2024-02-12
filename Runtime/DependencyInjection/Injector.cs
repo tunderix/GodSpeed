@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Ioni.DP.Singleton;
+using Ioni.DesignPatterns.Singleton;
 using Ioni.Utilities;
 using UnityEngine;
 using Ioni.Attributes;
@@ -10,7 +10,7 @@ using Ioni.Attributes;
 namespace Ioni.DependencyInjection
 {
     [DefaultExecutionOrder(-1000)]
-    public class Injector : MSingleton<Injector>
+    public class Injector : MonoSingleton<Injector>
     {
         private const BindingFlags k_bindingFlags =
             BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
