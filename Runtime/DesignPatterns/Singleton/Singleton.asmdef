@@ -1,0 +1,17 @@
+{
+    "name": "Singleton",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a89f64a514fca974bac8bfe05e715b72",
+        "GUID:3ca7c0434bd7ac342872ee6639758d80"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
