@@ -62,64 +62,45 @@ namespace Ioni.DesignPatterns.Singleton
         {
             configuration = newConfiguration;
         }
+
+        private void ConfigurationLoadScene()
+        {
+            if (configuration.InitializeInto == null || configuration.SceneManagement == null) return;
+            if (configuration.InitializeInto.BuildIndex.Equals(-1)) return;
+            configuration.SceneManagement.LoadSceneAsync(configuration.InitializeInto.BuildIndex, LoadSceneMode.Additive, OnManagementLoadScene);
+        }
         
         protected virtual void OnInitializing()
         {
             if (!Application.isPlaying || IsInitialized) return;
 
-            if (configuration == null)
-            {
-                configuration = new Configuration();
-            }
-            else if ((!configuration.ScenePersistent && configuration.ScenePrio == SingletonScenePriorization.Persistance) && configuration.InitializeInto.IsSet && configuration.Management != null)
-            {
-                if (configuration.Management != null)
-                {
-                    if (!configuration.InitializeInto.IsSet) return;
-                
-                    var sceneBuildIndex = configuration.InitializeInto.BuildIndex;
-                    var management = configuration.Management;
+            configuration ??= new Configuration();
 
-                    management.LoadSceneAsync(sceneBuildIndex, LoadSceneMode.Additive, OnManagementLoadScene);
-                }
-            }
-            else if (configuration.ScenePrio == SingletonScenePriorization.Persistance)
-            {
-                if (configuration.Management != null)
-                {
-                    if (!configuration.InitializeInto.IsSet) return;
-                
-                    var sceneBuildIndex = configuration.InitializeInto.BuildIndex;
-                    var management = configuration.Management;
-
-                    if (!configuration.ScenePersistent && management != null)
-                    {
-                        management.LoadSceneAsync(sceneBuildIndex, LoadSceneMode.Additive, OnManagementLoadScene);
-                    }
-                }
             
-                if (configuration.ScenePersistent)
+            if (configuration.ShouldDirectToDdol)
+            {
+                if (!configuration.ScenePersistent)
+                {
+                    ConfigurationLoadScene();
+                }
+                else
                 {
                     DontDestroyOnLoad(gameObject);
                 }
             }
-            else if (configuration.ScenePrio == SingletonScenePriorization.SceneAllocation)
+            else if (configuration.ShouldStayInScene)
             {
-                if (configuration.Management != null)
-                {
-                    if (!configuration.InitializeInto.IsSet) return;
-                
-                    var sceneBuildIndex = configuration.InitializeInto.BuildIndex;
-                    var management = configuration.Management;
-
-                    management.LoadSceneAsync(sceneBuildIndex, LoadSceneMode.Additive, OnManagementLoadScene);
-                }
+                ConfigurationLoadScene();
+            }
+            else if (configuration.ShouldDirectToInitializeInto)
+            {
+                ConfigurationLoadScene();
             }
         }
 
         private void OnManagementLoadScene(int sceneBuildIndex)
         {
-            configuration.Management.MoveToScene(gameObject, sceneBuildIndex);
+            configuration.SceneManagement.MoveToScene(gameObject, sceneBuildIndex);
         }
 
         protected virtual void OnInitialized()

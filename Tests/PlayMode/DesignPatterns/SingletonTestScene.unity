@@ -174,7 +174,7 @@ MonoBehaviour:
       sceneAsset: {fileID: 0}
       required: 0
       buildIndex: -1
-    appSceneManagement: {fileID: 0}
+    sceneManagement: {fileID: 0}
 --- !u!1 &332713594
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,7 +226,7 @@ MonoBehaviour:
       sceneAsset: {fileID: 102900000, guid: 207956ea5d3d5f140ac8004912952a62, type: 3}
       required: 1
       buildIndex: 2
-    appSceneManagement: {fileID: 0}
+    sceneManagement: {fileID: 0}
 --- !u!1 &652170605
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,7 +322,7 @@ MonoBehaviour:
       sceneAsset: {fileID: 0}
       required: 0
       buildIndex: -1
-    appSceneManagement: {fileID: 652170606}
+    sceneManagement: {fileID: 652170606}
 --- !u!1 &1355283914
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,7 +374,7 @@ MonoBehaviour:
       sceneAsset: {fileID: 0}
       required: 0
       buildIndex: -1
-    appSceneManagement: {fileID: 0}
+    sceneManagement: {fileID: 0}
 --- !u!1 &1899966237
 GameObject:
   m_ObjectHideFlags: 0
@@ -411,7 +411,7 @@ MonoBehaviour:
       sceneAsset: {fileID: 102900000, guid: 207956ea5d3d5f140ac8004912952a62, type: 3}
       required: 1
       buildIndex: 2
-    appSceneManagement: {fileID: 652170606}
+    sceneManagement: {fileID: 652170606}
 --- !u!4 &1899966239
 Transform:
   m_ObjectHideFlags: 0
@@ -478,4 +478,4 @@ MonoBehaviour:
       sceneAsset: {fileID: 102900000, guid: 207956ea5d3d5f140ac8004912952a62, type: 3}
       required: 1
       buildIndex: 2
-    appSceneManagement: {fileID: 652170606}
+    sceneManagement: {fileID: 652170606}
