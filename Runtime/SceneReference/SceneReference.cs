@@ -11,29 +11,6 @@ using UnityEditor;
 
 namespace Ioni.SceneReferencing
 {
-    /*
-    [Serializable]
-    public class SceneReference
-    {
-        [SerializeField] private Object sceneAsset;
-        [SerializeField] private string sceneName = "";
-        private int _sceneBuildIndex;
-
-        public string SceneName => sceneName;
-        public int SceneBuildIndex => SceneManager.GetSceneByName(sceneName).buildIndex;
-
-        public static implicit operator string(SceneReference sceneReference)
-        {
-            return sceneReference.SceneName;
-        }
-        
-        public static implicit operator int(SceneReference sceneReference)
-        {
-            return sceneReference.SceneBuildIndex;
-        }
-    }
-    */
-    
     /// <summary>
     /// Makes it possible to assign a scene asset in the inspector and load the scene data in a build.
     /// </summary>
@@ -58,10 +35,23 @@ namespace Ioni.SceneReferencing
         
         #endregion
 
-        /// <summary>
-        /// Build index of the scene.
-        /// -1 if no scene was assigned or it's not added to builds.
-        /// </summary>
+        ///<summary>
+        ///Gets the build index of the Unity Scene, and checks if a required scene is added to the build in the Unity Editor.
+        ///</summary>
+        ///<value>
+        ///Returns the build index of the Unity Scene.
+        ///</value>
+        ///<remarks>
+        ///In the Unity Editor, the scene asset's build index is refreshed every time this property is accessed. 
+        ///If the scene is marked as required but isn't added to the build, or no scene is assigned, an error message will be logged.
+        ///</remarks>
+        ///<exception cref="System.Exception">Thrown when a required scene is not added to the build or no scene is assigned in the Unity Editor.</exception>
+        ///<example>
+        ///This is an example of how to use this property:
+        ///<code>
+        ///int index = YourObject.BuildIndex;
+        ///</code>
+        ///</example>
         public int BuildIndex
         {
             get
@@ -231,9 +221,17 @@ namespace Ioni.SceneReferencing
             }
         }
 
-        /// <summary>
-        /// Subscribe build index caching to SceneList changes
-        /// </summary>
+        ///<summary>
+        ///This method is called upon loading the editor thanks to the InitializeOnLoadMethod attribute.
+        ///It updates the cache of scene build indexes and binds the method to the sceneListChanged event of the EditorBuildSettings.
+        ///</summary>
+        ///<remarks>
+        ///The method ensures it doesn't multiple times subscribe to the sceneListChanged event by first unsubscribing.
+        ///This method is useful for initializing things when the editor first loads and for responding to changes in the editor's build settings scene list.
+        ///</remarks>
+        ///<example>
+        ///This method is automatically called upon loading the editor and does not normally need to be manually invoked.
+        ///</example>
         [InitializeOnLoadMethod]
         private static void OnEditorInitializeOnLoad()
         {
@@ -249,12 +247,17 @@ namespace Ioni.SceneReferencing
         /// </summary>
         public SceneAsset EditorSceneAsset => sceneAsset;
 
-        /// <summary>
-        /// ** Editor-only **
-        /// Retrieves the build index of the specified scene asset.
-        /// </summary>
-        /// <param name="sceneAsset">The scene asset.</param>
-        /// <returns>The build index, -1 if not found.</returns>
+        ///<summary>
+        ///Gets the build index for the provided scene from a cache.
+        ///</summary>
+        ///<param name="sceneAsset">The SceneAsset from which to get the build index.</param>
+        ///<returns>Returns the cached build index for the supplied SceneAsset. If sceneAsset is null or if the index is not in the cache, returns -1.</returns>
+        ///<example>
+        ///This is an example of how to use the `GetSceneBuildIndex` method:
+        ///<code>
+        /// int buildIndex = YourClassName.GetSceneBuildIndex(sceneAsset);
+        ///</code>
+        ///</example>
         public static int GetSceneBuildIndex(SceneAsset sceneAsset)
         {
             if (sceneAsset == null  ||  !_cachedBuildIndexes.TryGetValue(sceneAsset, out int buildIndex))

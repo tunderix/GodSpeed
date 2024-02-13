@@ -7,11 +7,20 @@ namespace Ioni.Utilities
     /// </summary>
     public class TransformUtilities : MonoBehaviour
     {
-        /// <summary>
-        /// Pass a collider and get a random point inside that colliders bounds
-        /// </summary>
-        /// <param name="collider">Collider whose bounds are used to return random point</param>
-        /// <returns>Random point inside bounds</returns>
+        ///<summary>
+        ///Generates a random point inside the specified Collider's bounds.
+        ///</summary>
+        ///<param name="collider">The Collider within which to generate a random point.</param>
+        ///<returns>Returns a Vector3 representing a random point within the provided Collider's bounds.</returns>
+        ///<remarks>
+        ///This method is useful for generating random positions within a defined space, particularly useful in game development tasks such as spawning enemies or items within a specific area.
+        ///</remarks>
+        ///<example>
+        ///This is an example of how to use the `RandomPointInside` function:
+        ///<code>
+        ///Vector3 randomPosition = YourClassName.RandomPointInside(colliderInstance);
+        ///</code>
+        ///</example>
         public static Vector3 RandomPointInside(Collider collider)
         {
             var bounds = collider.bounds;
@@ -22,11 +31,20 @@ namespace Ioni.Utilities
             );
         }
         
-        /// <summary>
-        /// Pass a collider and get a random point inside bounds
-        /// </summary>
-        /// <param name="bounds">Bounds for random point</param>
-        /// <returns>Random 3D coordinate inside offered bounds</returns>
+        ///<summary>
+        ///Generates a random point inside the specified Bounds.
+        ///</summary>
+        ///<param name="bounds">The Bounds within which to generate a random point.</param>
+        ///<returns>Returns a Vector3 representing a random point within the provided Bounds.</returns>
+        ///<remarks>
+        ///This method is useful for generating random positions within a defined space, particularly useful in game development tasks such as spawning enemies or items within a specific area.
+        ///</remarks>
+        ///<example>
+        ///Here is an example of how to use the `RandomPointInside` method:
+        ///<code>
+        ///Vector3 randomPosition = YourClassName.RandomPointInside(boundsInstance);
+        ///</code>
+        ///</example>
         public static Vector3 RandomPointInside(Bounds bounds)
         {
             return new Vector3(

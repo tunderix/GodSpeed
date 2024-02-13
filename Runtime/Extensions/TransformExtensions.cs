@@ -2,35 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
- *
- * public class TransformUtilityTests
-    {
-        private Bounds _bounds;
-        
-        [SetUp]
-        public void Setup()
-        {
-            _bounds = new Bounds(new Vector3(4, 4, 4), new Vector3(3, 3, 3));
-        }
-        
-        [Test]
-        public void RandomPointInsideReturnPointIsInsideBounds()
-        {
-            // Generate random point inside _bounds. Each of the values should be between 4 +- (3/2)
-            Vector3 rndPoint = Vector3.back; //TransformUtilities.RandomPointInside(bounds: _bounds);
-            // X is inside offered bounds
-            Assert.LessOrEqual(rndPoint.x, 5.5);
-            Assert.GreaterOrEqual(rndPoint.x, 2.5);
-            // Y is inside offered bounds
-            Assert.LessOrEqual(rndPoint.y, 5.5);
-            Assert.GreaterOrEqual(rndPoint.y, 2.5);
-            // Z is inside offered bounds
-            Assert.LessOrEqual(rndPoint.z, 5.5);
-            Assert.GreaterOrEqual(rndPoint.z, 2.5);
-        }
-    }
- */
 namespace Ioni.Extensions
 {
     /// <summary>
@@ -38,10 +9,21 @@ namespace Ioni.Extensions
     /// </summary>
     public static class TransformExtensions 
     {
-        /// <summary>
-        /// Destroy all children objects belonging to transforms game object
-        /// </summary>
-        /// <param name="transform">this</param>
+        ///<summary>
+        ///Destroys all children of a Transform.
+        ///</summary>
+        ///<param name="transform">The Transform whose children will be destroyed.</param>
+        ///<remarks>
+        ///This method iterates through each child of the given Transform and destroys them. 
+        ///It can be used to clean up a Transform by removing all of its child objects.
+        ///</remarks>
+        ///<example>
+        ///This is an example of how to use the DestroyChildren() method:
+        ///<code>
+        ///transform.DestroyChildren();
+        ///</code>
+        ///The above code will destroy all child objects of the "transform" instance.
+        ///</example>
         public static void DestroyChildren(this Transform transform)
         {
             for (var i = transform.childCount - 1; i >= 0; i--)
@@ -50,10 +32,22 @@ namespace Ioni.Extensions
             }
         }
         
-        /// <summary>
-        /// Reset transform to default configurations
-        /// </summary>
-        /// <param name="transform">this</param>
+        ///<summary>
+        ///Resets the position, rotation, and scale of a Transform.
+        ///</summary>
+        ///<param name="transform">The Transform to be reset.</param>
+        ///<remarks>
+        ///This method sets the position of the Transform to the origin (0,0,0), 
+        ///its local rotation to the identity quaternion (no rotation), 
+        ///and its scale to one, effectively resetting any transformations applied to it.
+        ///</remarks>
+        ///<example>
+        ///This is an example of how to use the ResetTransformation() method:
+        ///<code>
+        /// transform.ResetTransformation();
+        ///</code>
+        ///The above code will reset the position, rotation, and scale of the "transform" instance.
+        ///</example>
         public static void ResetTransformation(this Transform transform)
         {
             transform.position = Vector3.zero;
@@ -61,11 +55,46 @@ namespace Ioni.Extensions
             transform.localScale = Vector3.one;
         }
         
-        /// <summary>
-        /// Pass a collider and get a random point inside that colliders bounds
-        /// </summary>
-        /// <param name="collider">Collider whose bounds are used to return random point</param>
-        /// <returns>Random point inside bounds</returns>
+        ///<summary>
+        ///Returns the number of children the Transform has.
+        ///</summary>
+        ///<param name="transform">The original Transform.</param>
+        ///<returns>The child count of the Transform.</returns>
+        ///<remarks>
+        ///This method returns the number of children the Transform has. It can be useful when you need to iterate over the children of a Transform or check if a Transform has any children.
+        ///</remarks>
+        ///<example>
+        ///This is an example of how to use the ChildCount() method:
+        ///<code>
+        /// Transform parentTransform = gameObject.transform;
+        /// int childCount = parentTransform.ChildCount();
+        /// </code>
+        ///In this example, 'childCount' will hold the number of children the 'parentTransform' has.
+        ///</example>
+        public static int ChildCount(this Transform transform)
+        {
+            return transform.childCount;
+        }
+        
+        ///<summary>
+        ///Generates a random point inside the given collider's bounding box.
+        ///</summary>
+        ///<param name="collider">The Collider within which a random point will be generated.</param>
+        ///<returns>A Vector3 representing a random point inside the bounds of the given collider.</returns>
+        ///<remarks>
+        ///This method creates a random point inside the Collider's minimum and maximum extents to generate a random position. 
+        ///Note that this method does not guarantee that the point will be inside the Collider if it has a complex shape. 
+        ///It will be inside the bounding box of the Collider.
+        ///</remarks>
+        ///<example>
+        ///This is an example showing how to use the 'RandomPointInside()' method:
+        ///<code>
+        /// Collider collider;
+        /// // assume 'collider' has been initialized
+        /// Vector3 randomPoint = collider.RandomPointInside();
+        ///</code>
+        ///In this example, 'randomPoint' will be a random point inside the bounding box of 'collider'.
+        ///</example>
         public static Vector3 RandomPointInside(this Collider collider)
         {
             var bounds = collider.bounds;
@@ -76,11 +105,23 @@ namespace Ioni.Extensions
             );
         }
         
-        /// <summary>
-        /// Pass a collider and get a random point inside bounds
-        /// </summary>
-        /// <param name="bounds">Bounds for random point</param>
-        /// <returns>Random 3D coordinate inside offered bounds</returns>
+        ///<summary>
+        ///Generates a random point inside the given Bounds.
+        ///</summary>
+        ///<param name="bounds">The Bounds within which a random point will be generated.</param>
+        ///<returns>A Vector3 representing a random point inside the given bounds.</returns>
+        ///<remarks>
+        ///This method creates a random point inside the Bounds by generating a random position on each axis between the minimum and maximum extents of the Bounds.
+        ///</remarks>
+        ///<example>
+        ///This is an example of how to use the RandomPointInside() method:
+        ///<code>
+        /// Bounds bounds;
+        /// // assume 'bounds' has been initialized
+        /// Vector3 randomPoint = bounds.RandomPointInside();
+        ///</code>
+        ///In this example, 'randomPoint' will be a Vector3 representing a random point inside 'bounds'.
+        ///</example>
         public static Vector3 RandomPointInside(this Bounds bounds)
         {
             return new Vector3(

@@ -9,12 +9,21 @@ namespace Ioni.Utilities
     /// </summary>
     public static class ComponentUtils
     {
-        /// <summary>
-        /// Null check for Unity Object
-        /// </summary>
-        /// <param name="obj">Object to check</param>
-        /// <param name="className">Name of object class</param>
-        /// <param name="objectName">Name of the game object</param>
+        ///<summary>
+        ///Logs an error message if a required object is not found on a specific object.
+        ///</summary>
+        ///<param name="obj">The Object to check for null-ness.</param>
+        ///<param name="className">The class name of the expected object.</param>
+        ///<param name="objectName">The name of the specific object where the required object should exist.</param>
+        ///<remarks>
+        ///This method is useful for debugging and ensuring the necessary components exist where expected.
+        ///</remarks>
+        ///<example>
+        ///This is an example of how to use the `NotFound` function:
+        ///<code>
+        ///YourClassName.NotFound(requiredComponent, "ExpectedClassName", "SpecificObjectName");
+        ///</code>
+        ///</example>
         private static void NotFound(Object obj, string className, string objectName)
         {
             if (obj == null)
@@ -23,12 +32,21 @@ namespace Ioni.Utilities
             }
         }
 
-        /// <summary>
-        /// SafeGetComponent makes a null check for monobehaviour, logs error if not found and 
-        /// </summary>
-        /// <param name="mono">Monobehaviour to check</param>
-        /// <typeparam name="T">The type being looked at</typeparam>
-        /// <returns></returns>
+        ///<summary>
+        ///Attempts to obtain a component of type T from the provided MonoBehaviour and logs an error if it's not found.
+        ///</summary>
+        ///<typeparam name="T">The type of component to retrieve from the MonoBehaviour. This must be a type that derives from Component.</typeparam>
+        ///<param name="mono">The MonoBehaviour from which to retrieve the component.</param>
+        ///<returns>Returns the component of type T, or null if it doesn't exist.</returns>
+        ///<remarks>
+        ///This method is useful for safely accessing components on a MonoBehaviour and ensuring they exist. It will also log an error message if the component is not found, which is useful for debugging.
+        ///</remarks>
+        ///<example>
+        ///Here is an example of how to use the `SafeGetComponent` method:
+        ///<code>
+        /// YourComponentType component = YourClassName.SafeGetComponent<YourComponentType>(monoBehaviourInstance);
+        ///</code>
+        ///</example>
         public static T SafeGetComponent<T>(MonoBehaviour mono) where T : Component
         {
             T comp = mono.GetComponent<T>();
@@ -36,12 +54,21 @@ namespace Ioni.Utilities
             return comp;
         }
         
-        /// <summary>
-        /// SafeGetComponentInChildren makes a null check for MonoBehaviours as children. Logs Error if not found. 
-        /// </summary>
-        /// <param name="mono">Monobehaviour with children to check</param>
-        /// <typeparam name="T">The type being looked at</typeparam>
-        /// <returns></returns>
+        ///<summary>
+        ///Attempts to obtain a component of type T in the children of the provided MonoBehaviour, and logs an error if it isn't found.
+        ///</summary>
+        ///<typeparam name="T">The type of component to retrieve. This must be a type that derives from Component.</typeparam>
+        ///<param name="mono">The MonoBehaviour in whose children the component will be searched for.</param>
+        ///<returns>Returns the component of type T from the children, or null if it doesn't exist.</returns>
+        ///<remarks>
+        ///This method helps with safely accessing components in a MonoBehaviour's children and makes sure they exist. Additionally, an error message will be logged if the component does not exist, aiding in debugging.
+        ///</remarks>
+        ///<example>
+        ///Here is an example of how to use the `SafeGetComponentInChildren` method:
+        ///<code>
+        /// YourComponentType component = YourClassName.SafeGetComponentInChildren<YourComponentType>(monoBehaviourInstance);
+        ///</code>
+        ///</example>
         public static T SafeGetComponentInChildren<T>(MonoBehaviour mono) where T : Component
         {
             T comp = mono.GetComponentInChildren<T>();
