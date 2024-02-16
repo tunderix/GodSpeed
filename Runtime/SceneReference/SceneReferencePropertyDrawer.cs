@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 
@@ -126,3 +127,4 @@ namespace Ioni.SceneReferencing
         }
     }
 }
+#endif
