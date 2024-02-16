@@ -79,6 +79,7 @@ namespace Ioni.SceneReferencing
 
         
         #region Implicit Operations
+        /*
         /// <summary>
         /// Operate SceneReferences scene name as string 
         /// </summary>
@@ -98,7 +99,7 @@ namespace Ioni.SceneReferencing
         {
             return sceneReference.buildIndex;
         }
-
+        */
         #endregion
         
         #region ISerializationCallbackReceiver implementation
