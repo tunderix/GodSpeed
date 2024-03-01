@@ -431,5 +431,61 @@ namespace Ioni.Extensions
             }
             return sb.ToString();
         }
+        
+        /// <summary>
+        /// Converts the object to a string representation in a log format.
+        /// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+        /// <param name="obj">The object to convert.</param>
+        /// <returns>A string representation of the object in a log format.</returns>
+        /// <remarks>
+        /// This method converts the object to a string representation by iterating through its fields and formatting them
+        /// as field name-value pairs enclosed in square brackets.
+        /// </remarks>
+        /// <example>
+        /// <code>
+        /// class OwnTest
+        /// {
+        ///     string name = "Ioni";
+        ///     int age = 25;
+        /// }
+        /// 
+        /// class Program
+        /// {
+        ///     static void Main(string[] args)
+        ///     {
+        ///         OwnTest obj = new OwnTest();
+        ///         Console.WriteLine(obj.ToLogFormat());
+        ///     }
+        /// }
+        /// </code>
+        /// The output will be: <c>[name: Ioni, age: 25]</c>
+        /// </example>
+        public static string ToLogFormat<T>(this T obj)
+        {
+            Type type = obj.GetType();
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("[");
+            bool isFirstField = true;
+
+            foreach (FieldInfo field in type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            {
+                if (!isFirstField)
+                {
+                    sb.Append(", ");
+                }
+
+                sb.Append(field.Name);
+                sb.Append(": ");
+                sb.Append(field.GetValue(obj));
+
+                isFirstField = false;
+            }
+
+            sb.Append("]");
+
+            return sb.ToString();
+        }
     }
 }
